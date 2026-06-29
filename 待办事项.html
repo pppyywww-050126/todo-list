@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>简易待办清单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+        body {
+            background-color: #f0f4f8;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 25px;
+        }
+        .input-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #taskInput {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+        #addBtn {
+            padding: 12px 22px;
+            background: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #addBtn:hover {
+            background: #2b6cb0;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            background: #f7fafc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .task-text {
+            font-size: 16px;
+            color: #2d3748;
+        }
+        .task-text.finish {
+            text-decoration: line-through;
+            color: #a0aec0;
+        }
+        .btn-group button {
+            margin-left: 8px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .complete-btn {
+            background: #48bb78;
+            color: white;
+        }
+        .del-btn {
+            background: #e53e3e;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>我的待办清单</h1>
+        <div class="input-box">
+            <input type="text" id="taskInput" placeholder="输入新待办任务...">
+            <button id="addBtn">添加</button>
+        </div>
+        <div id="taskList"></div>
+    </div>
+
+    <script>
+        // 获取元素
+        const input = document.getElementById('taskInput');
+        const addBtn = document.getElementById('addBtn');
+        const taskList = document.getElementById('taskList');
+
+        // 添加任务
+        function addTask() {
+            const text = input.value.trim();
+            if (!text) return alert("请输入任务内容！");
+
+            // 创建任务容器
+            const item = document.createElement('div');
+            item.className = 'task-item';
+
+            // 任务文字
+            const textSpan = document.createElement('span');
+            textSpan.className = 'task-text';
+            textSpan.innerText = text;
+
+            // 按钮区域
+            const btnWrap = document.createElement('div');
+            btnWrap.className = 'btn-group';
+
+            // 完成按钮
+            const completeBtn = document.createElement('button');
+            completeBtn.className = 'complete-btn';
+            completeBtn.innerText = '完成';
+            completeBtn.onclick = () => textSpan.classList.toggle('finish');
+
+            // 删除按钮
+            const delBtn = document.createElement('button');
+            delBtn.className = 'del-btn';
+            delBtn.innerText = '删除';
+            delBtn.onclick = () => item.remove();
+
+            // 组装
+            btnWrap.appendChild(completeBtn);
+            btnWrap.appendChild(delBtn);
+            item.appendChild(textSpan);
+            item.appendChild(btnWrap);
+            taskList.appendChild(item);
+
+            // 清空输入框
+            input.value = '';
+        }
+
+        // 点击添加按钮
+        addBtn.addEventListener('click', addTask);
+        // 回车快速添加
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter') addTask();
+        })
+    </script>
+</body>
+</html>
